@@ -20,4 +20,4 @@ Within this project's directory, install the Node dependencies and run the app:
 npm install
 node index.js
 ```
-Then take a look at `localhost:3000`.
+Discover your fortune at `localhost:3000`.
