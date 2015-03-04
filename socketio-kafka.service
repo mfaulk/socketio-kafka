@@ -1,0 +1,18 @@
+[Unit]
+Description=Fortune cookies with socket.io and kafka.
+
+[Service]
+EnvironmentFile=/etc/environment
+
+## Directives with "=-" are allowed to fail without consequence.
+ExecStartPre=-/usr/bin/docker kill socketio-kafka
+ExecStartPre=-/usr/bin/docker rm socketio-kafka
+
+# Build image if theres none.
+ExecStartPre=/bin/sh -c "/usr/bin/docker images | grep socketio-kafka || /usr/bin/docker build -t socketio-kafka https://github.com/mfaulk/socketio-kafka"
+
+ExecStart=/usr/bin/sh -c '/usr/bin/docker run --name socketio-kafka \
+	-e ZOOKEEPER_SERVER=$(/usr/bin/etcdctl get /services/zookeeper):9092 \
+	socketio-kafka'
+
+ExecStop=/usr/bin/docker stop socketio-kafka

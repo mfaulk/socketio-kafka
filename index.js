@@ -7,9 +7,13 @@ app.get('/', function(req,res){
 });
 var kafka = require('kafka-node');
 
-var KAFKA_BROKER = 'localhost:2181';
+// TODO: fetch from environment variable.
+var ZOOKEEPER_SERVER = 'localhost:2181';
+if(process.env.ZOOKEEPER_SERVER) {
+  ZOOKEEPER_SERVER = process.env.ZOOKEEPER_SERVER;
+}
 var KAFKA_CLIENT_ID = "socketio-kafka";
-var kafkaClient = new kafka.Client(KAFKA_BROKER, KAFKA_CLIENT_ID);
+var kafkaClient = new kafka.Client(ZOOKEEPER_SERVER, KAFKA_CLIENT_ID);
 var producer = new kafka.Producer(kafkaClient);
 var consumer = new kafka.Consumer(kafkaClient, [], {autoCommit: true});
 var topics = ['fortune-cookie'];

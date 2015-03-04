@@ -21,3 +21,10 @@ npm install
 node index.js
 ```
 Discover your fortune at `localhost:3000`.
+
+## Running in Docker
+```
+docker build -t socketio-kafka .
+docker run -p 3000:3000 -d socketio-kafka
+```
+The app should now be running on localhost:3000, or if you are using boot2docker on port 3000 of your boot2docker IP address (run boot2docker ip to find it).
