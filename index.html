@@ -23,7 +23,7 @@
 <script>
   var socket = io();
 
-  socket.on('test-topic', function(msg){
+  socket.on('fortune-cookie', function(msg){
     console.log('msg');
     $('#messages').append($('<li>').text(msg));
   });

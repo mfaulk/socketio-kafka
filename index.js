@@ -12,7 +12,7 @@ var KAFKA_CLIENT_ID = "socketio-kafka";
 var kafkaClient = new kafka.Client(KAFKA_BROKER, KAFKA_CLIENT_ID);
 var producer = new kafka.Producer(kafkaClient);
 var consumer = new kafka.Consumer(kafkaClient, [], {autoCommit: true});
-var topics = ['test-topic'];
+var topics = ['fortune-cookie'];
 
 /* 
 	Uses a producer to create the topics that the consumer expects. 
@@ -39,9 +39,11 @@ function initializeTopics(topics) {
   });
 }
 
+var fortuneCookie = require('./fortune-cookie');
+
 function sendMessage() {
   var payloads = [
-    { topic: 'test-topic', messages: 'hi', partition: 0 }
+    { topic: 'fortune-cookie', messages: fortuneCookie.fortune(), partition: 0 }
     ];
   console.log('Sending...');
   producer.send(payloads, function(err, data){
@@ -60,8 +62,8 @@ producer.on('ready', function (message) {
 producer.on('ready', function (message) {setInterval(sendMessage, 1000)});
 
 consumer.on('message', function (message) {
-  console.log('emitting message...');
-  io.emit('test-topic', 'message');
+  console.log(message);
+  io.emit('fortune-cookie', JSON.stringify(message));
 });
 
 // io.on('connection', function(socket){
