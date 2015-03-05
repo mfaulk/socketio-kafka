@@ -11,6 +11,8 @@ var kafka = require('kafka-node');
 var ZOOKEEPER_SERVER = 'localhost:2181';
 if(process.env.ZOOKEEPER_SERVER) {
   ZOOKEEPER_SERVER = process.env.ZOOKEEPER_SERVER;
+  console.error('Set ZOOKEEPER_SERVER');
+  console.error(ZOOKEEPER_SERVER);
 }
 var KAFKA_CLIENT_ID = "socketio-kafka";
 var kafkaClient = new kafka.Client(ZOOKEEPER_SERVER, KAFKA_CLIENT_ID);
