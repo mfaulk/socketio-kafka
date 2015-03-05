@@ -11,7 +11,7 @@ var kafka = require('kafka-node');
 var ZOOKEEPER_SERVER = 'localhost:2181';
 if(process.env.ZOOKEEPER_SERVER) {
   ZOOKEEPER_SERVER = process.env.ZOOKEEPER_SERVER;
-  console.error('Set ZOOKEEPER_SERVER');
+  console.error('Set ZOOKEEPER_SERVER:');
   console.error(ZOOKEEPER_SERVER);
 }
 var KAFKA_CLIENT_ID = "socketio-kafka";
@@ -51,7 +51,7 @@ function sendMessage() {
   var payloads = [
     { topic: 'fortune-cookie', messages: fortuneCookie.fortune(), partition: 0 }
     ];
-  console.log('Sending...');
+  console.error('Sending...');
   producer.send(payloads, function(err, data){
     console.log('.');
   });
@@ -68,7 +68,7 @@ producer.on('ready', function (message) {
 producer.on('ready', function (message) {setInterval(sendMessage, 1000)});
 
 consumer.on('message', function (message) {
-  console.log(message);
+  console.error(message);
   io.emit('fortune-cookie', JSON.stringify(message));
 });
 
@@ -77,6 +77,8 @@ consumer.on('message', function (message) {
 //     io.emit('chat message', msg);
 //   });
 // });
+console.log('A log message.');
+console.error('An error message');
 
 http.listen(3000, function(){
   console.log('listening on *:3000');
