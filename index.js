@@ -5,15 +5,15 @@ var io = require('socket.io')(http);
 app.get('/', function(req,res){
 	res.sendFile(__dirname + '/index.html');
 });
-var kafka = require('kafka-node');
 
-// TODO: fetch from environment variable.
+var kafka = require('kafka-node');
+// IP:Port
 var ZOOKEEPER_SERVER = 'localhost:2181';
 if(process.env.ZOOKEEPER_SERVER) {
-  ZOOKEEPER_SERVER = process.env.ZOOKEEPER_SERVER;
-  console.log('Set ZOOKEEPER_SERVER: ' + ZOOKEEPER_SERVER);
+  ZOOKEEPER_SERVER = process.env.ZOOKEEPER_SERVER + ":2181";
 }
 var KAFKA_CLIENT_ID = "socketio-kafka";
+console.log('ZOOKEEPER_SERVER: ' + ZOOKEEPER_SERVER);
 var kafkaClient = new kafka.Client(ZOOKEEPER_SERVER, KAFKA_CLIENT_ID);
 var producer = new kafka.Producer(kafkaClient);
 var consumer = new kafka.Consumer(kafkaClient, [], {autoCommit: true});
@@ -40,7 +40,6 @@ function initializeTopics(topics) {
         console.log(added);
       }
     });
-
   });
 }
 
@@ -62,11 +61,7 @@ producer.on('error', function (err) {
 
 producer.on('ready', function (message) {
   console.log('Producer ready');
-  initializeTopics(topics);  
-});
-
-producer.on('ready', function (message) {
-  console.log('Producer ready.');
+  initializeTopics(topics);
   setInterval(sendMessage, 1000);
 });
 
@@ -74,14 +69,6 @@ consumer.on('message', function (message) {
   console.log(message);
   io.emit('fortune-cookie', JSON.stringify(message));
 });
-
-// io.on('connection', function(socket){
-//   socket.on('chat message', function(msg){
-//     io.emit('chat message', msg);
-//   });
-// });
-console.log('A log message.');
-console.error('An error message');
 
 http.listen(3000, function(){
   console.log('listening on *:3000');

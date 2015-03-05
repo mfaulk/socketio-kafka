@@ -18,7 +18,7 @@ ExecStartPre=/bin/sh -c "/usr/bin/docker images | grep socketio-kafka || /usr/bi
 
 ExecStart=/usr/bin/sh -c '/usr/bin/docker run --rm --name socketio-kafka \
 	-p 3000:3000 \
-	-e ZOOKEEPER_SERVER=$(/usr/bin/etcdctl get /services/zookeeper):9092 \
+	-e ZOOKEEPER_SERVER=$(/usr/bin/etcdctl get /services/zookeeper):2181 \
 	socketio-kafka'
 
 ExecStop=/usr/bin/docker stop socketio-kafka
