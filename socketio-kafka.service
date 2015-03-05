@@ -17,6 +17,7 @@ ExecStartPre=-/usr/bin/docker rm socketio-kafka
 ExecStartPre=/bin/sh -c "/usr/bin/docker images | grep socketio-kafka || /usr/bin/docker build -t socketio-kafka github.com/mfaulk/socketio-kafka.git"
 
 ExecStart=/usr/bin/sh -c '/usr/bin/docker run --rm --name socketio-kafka \
+	-p 3000:3000 \
 	-e ZOOKEEPER_SERVER=$(/usr/bin/etcdctl get /services/zookeeper):9092 \
 	socketio-kafka'
 
