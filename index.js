@@ -10,7 +10,7 @@ var kafka = require('kafka-node');
 // IP:Port
 var ZOOKEEPER_SERVER = 'localhost:2181';
 if(process.env.ZOOKEEPER_SERVER) {
-  ZOOKEEPER_SERVER = process.env.ZOOKEEPER_SERVER + ":2181";
+  ZOOKEEPER_SERVER = process.env.ZOOKEEPER_SERVER;
 }
 var KAFKA_CLIENT_ID = "socketio-kafka";
 console.log('ZOOKEEPER_SERVER: ' + ZOOKEEPER_SERVER);
