@@ -5,7 +5,7 @@ MAINTAINER https://github.com/mfaulk/socketio-kafka.git
 
 RUN apt-get update
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get install -y nodejs npm
+RUN apt-get install -y nodejs npm build-essential nodejs-legacy
 
 RUN mkdir /app
 ADD . /app/

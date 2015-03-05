@@ -4,14 +4,19 @@ Description=Fortune cookies with socket.io and kafka.
 [Service]
 EnvironmentFile=/etc/environment
 
+# Prevents timeouts, e.g. while building a docker image from github.
+TimeoutStartSec=0
+
 ## Directives with "=-" are allowed to fail without consequence.
 ExecStartPre=-/usr/bin/docker kill socketio-kafka
 ExecStartPre=-/usr/bin/docker rm socketio-kafka
 
 # Build image if theres none.
-ExecStartPre=/bin/sh -c "/usr/bin/docker images | grep socketio-kafka || /usr/bin/docker build -t socketio-kafka https://github.com/mfaulk/socketio-kafka"
+# Building from github requires github.com/your/project-name.git
 
-ExecStart=/usr/bin/sh -c '/usr/bin/docker run --name socketio-kafka \
+ExecStartPre=/bin/sh -c "/usr/bin/docker images | grep socketio-kafka || /usr/bin/docker build -t socketio-kafka github.com/mfaulk/socketio-kafka.git"
+
+ExecStart=/usr/bin/sh -c '/usr/bin/docker run --rm --name socketio-kafka \
 	-e ZOOKEEPER_SERVER=$(/usr/bin/etcdctl get /services/zookeeper):9092 \
 	socketio-kafka'
 
